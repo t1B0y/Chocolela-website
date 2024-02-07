@@ -72,7 +72,7 @@ export const fetchVariations = (productId) => async (dispatch, getState) => {
 };
 
 export const ProductsSlice = createSlice({
-  name: 'filter',
+  name: 'products',
   initialState,
   reducers: {
     setProduct: (state, action) => {

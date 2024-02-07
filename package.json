@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@cocart/cocart-rest-api": "^1.1.0",
     "@gsap/react": "^2.0.2",
     "@reduxjs/toolkit": "^1.9.7",
     "@woocommerce/woocommerce-rest-api": "^1.0.1",
@@ -20,12 +21,14 @@
     "gsap": "^3.12.4",
     "html-react-parser": "^5.1.1",
     "install": "^0.13.0",
+    "jsonwebtoken": "^9.0.2",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
     "npm": "^10.2.5",
     "oauth-1.0a": "^2.2.6",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
+    "react-cookies": "^0.1.1",
     "react-dom": "^18.2.0",
     "react-lottie": "^1.2.4",
     "react-native-woocommerce-api": "^1.8.8",

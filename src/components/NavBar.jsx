@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Nav, MenuNav } from '../styledComponents/NavBar';
 import logo1 from '../assets/logo1.svg';
 import searchLogo from '../assets/search.svg';
@@ -6,9 +6,17 @@ import cartLogo from '../assets/cart.svg';
 import ThumbnailNavBar from './ThumbnailNavBar';
 import { Link } from 'react-router-dom';
 import NavBarHover from './NavBarHover';
+import { useDispatch } from 'react-redux';
+import { addProduct, getCart, setCartKey } from '../redux/cart';
+import cookie from 'react-cookies';
 
 function NavBar() {
   const [hovered, setHover] = useState(null);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setCartKey(cookie.load('chocolela_cart')));
+    dispatch(getCart());
+  }, []);
   return (
     <Nav>
       <div id="nav-top-bar">

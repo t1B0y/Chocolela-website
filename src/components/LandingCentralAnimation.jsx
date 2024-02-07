@@ -14,7 +14,6 @@ function LandingCentralAnimation({ isReversed, img, text }) {
   };
 
   useEffect(() => {
-    console.log('stopplay');
     lottieRef.current.stop();
     lottieRef.current.play();
   }, [isReversed]);

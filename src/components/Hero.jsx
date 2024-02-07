@@ -3,6 +3,8 @@ import { Hero as Container } from '../styledComponents/Hero';
 import useInterval from 'use-interval';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
+import { addProduct } from '../redux/cart';
+import { useDispatch } from 'react-redux';
 
 function Hero() {
   const contents = [
@@ -76,7 +78,12 @@ function Hero() {
     <Container>
       <div className="overlay-hero" />
       {contents.map((obj, i) => (
-        <img src={obj.img} className="img-hero" id={`img-hero-${i}`} />
+        <img
+          key={'hero-img' + i}
+          src={obj.img}
+          className="img-hero"
+          id={`img-hero-${i}`}
+        />
       ))}
       <div className="text-hero">
         <h2>{current.title}</h2>
