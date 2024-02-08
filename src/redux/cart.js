@@ -43,7 +43,6 @@ export const getCart = () => async (dispatch, getState) => {
 export const addProduct = (productId, qty) => async (dispatch, getState) => {
   try {
     const cartKey = getState().cart.cartId;
-    console.log(cartKey);
     const res = await Cart.post(
       cartKey
         ? `cart/add-item?cart_key=${getState().cart.cartId}`
