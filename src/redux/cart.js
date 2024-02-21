@@ -24,16 +24,19 @@ const initialState = {
 
 export const getCart = () => async (dispatch, getState) => {
   try {
-    const cartKey = getState().cart.cartId;
+    const cartKey = cookie.load('chocolela_cart');
     if (cartKey) {
-      const res = await Cart.get(`cart?cart_key=${getState().cart.cartId}`);
-      console.log(res.data);
+      const res = await Cart.get(`cart?cart_key=${cartKey}`);
       const cart = {
         items: res.data.items,
         item_count: res.data.item_count,
         price_total: res.data.totals.total,
       };
       dispatch(cartSlice.actions.setCart(cart));
+    } else {
+      const res = await Cart.get(`cart`);
+      const cartKey = res.data.cart_key;
+      cookie.save('chocolela_cart', cartKey);
     }
   } catch (err) {
     console.log(err);
@@ -42,18 +45,15 @@ export const getCart = () => async (dispatch, getState) => {
 
 export const addProduct = (productId, qty) => async (dispatch, getState) => {
   try {
-    const cartKey = getState().cart.cartId;
+    const cartKey = cookie.load('chocolela_cart');
+    console.log(cartKey);
     const res = await Cart.post(
-      cartKey
-        ? `cart/add-item?cart_key=${getState().cart.cartId}`
-        : `cart/add-item`,
+      cartKey ? `cart/add-item?cart_key=${cartKey}` : `cart/add-item`,
       {
-        id: productId,
-        quantity: qty,
+        id: String(productId),
+        quantity: String(qty),
       }
     );
-    setCartCookie(res.data.cart_key);
-    dispatch(cartSlice.actions.setCartKey(cookie.load('chocolela_cart')));
     dispatch(getCart());
   } catch (err) {
     console.log(err);
@@ -79,9 +79,10 @@ export const updateQuantity =
   };
 
 export const removeProduct = (productKey) => async (dispatch, getState) => {
+  const cartkey = getState().cart.cartId;
   try {
     const res = await Cart.delete(
-      `cart/item/${productKey}?cart_key=${getState().cart.cartId}`
+      `cart/item/${productKey}?cart_key=${cartkey}`
     );
     setCartCookie(res.data.cart_key);
     dispatch(cartSlice.actions.setCartKey(cookie.load('chocolela_cart')));
@@ -102,9 +103,11 @@ export const cartSlice = createSlice({
       state.cartId = undefined;
     },
     setCart: (state, action) => {
-      state.items = action.payload.items;
-      state.item_count = action.payload.item_count;
-      state.price_total = action.payload.price_total;
+      {
+        state.items = action.payload.items;
+        state.item_count = action.payload.item_count;
+        state.price_total = action.payload.price_total;
+      }
     },
   },
 });

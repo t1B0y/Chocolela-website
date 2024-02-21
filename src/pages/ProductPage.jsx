@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProduct, fetchVariations } from '../redux/products';
 import Parser from 'html-react-parser';
+import { addProduct } from '../redux/cart';
 
 function ProductPage() {
   const { productId } = useParams();
@@ -13,7 +14,7 @@ function ProductPage() {
   const product = useSelector((state) => state.products.product);
   const loading = useSelector((state) => state.products.isLoading);
   const variations = useSelector((state) => state.products.variations);
-  console.log(product);
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     dispatch(fetchProduct(productId));
@@ -53,15 +54,17 @@ function ProductPage() {
                 ))}
               </select>
             )}
-            <button>Ajouter au panier</button>
+            <button onClick={() => dispatch(addProduct(productId, quantity))}>
+              Ajouter au panier
+            </button>
             <div className="description-block" content={product.description}>
               <div className="header">
                 <h5 className="description-title">description</h5>
                 <span className="description-line"></span>
               </div>
-              <p className="product-description">
+              <div className="product-description">
                 {Parser(product.description)}
-              </p>
+              </div>
             </div>
           </ProductInfos>
         </>

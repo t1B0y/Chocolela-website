@@ -1,5 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import OAuth from 'oauth-1.0a';
+import CryptoJS from 'crypto-js';
+import { Base64 } from 'crypto-js/enc-base64';
+
+const axiosConfig = {
+  baseURL: 'https://41vn2anfp4.execute-api.us-east-1.amazonaws.com/',
+  withCredentials: true,
+  Accept: 'application/json',
+};
+
+const WooCommmerce = axios.create(axiosConfig);
 
 const initialState = {
   products: [],
@@ -21,11 +32,7 @@ export const fetchProducts =
   async (dispatch, getState) => {
     try {
       dispatch(ProductsSlice.actions.startLoading());
-      const res = await axios.get(
-        `https://41vn2anfp4.execute-api.us-east-1.amazonaws.com/products?categories=${args.join(
-          ','
-        )}`
-      );
+      const res = await WooCommmerce.get(`products?category=${args.join(',')}`);
       const parsed = res.data.map((product) => {
         const obj = {};
         obj.name = product.name;
@@ -44,9 +51,7 @@ export const fetchProducts =
 export const fetchProduct = (id) => async (dispatch, getState) => {
   try {
     dispatch(ProductsSlice.actions.startLoading());
-    const res = await axios.get(
-      `https://41vn2anfp4.execute-api.us-east-1.amazonaws.com/product?productId=${id}`
-    );
+    const res = await WooCommmerce.get(`product?productId=${id}`);
     dispatch(ProductsSlice.actions.stopLoading());
     dispatch(ProductsSlice.actions.setProduct(res.data));
   } catch (err) {
@@ -58,8 +63,8 @@ export const fetchVariations = (productId) => async (dispatch, getState) => {
   try {
     dispatch(ProductsSlice.actions.startLoading());
     try {
-      const variations = await axios.get(
-        `https://41vn2anfp4.execute-api.us-east-1.amazonaws.com/product-variations?productId=${productId}`
+      const variations = await WooCommmerce.get(
+        `product-variations?productId=${productId}`
       );
       dispatch(ProductsSlice.actions.stopLoading());
       dispatch(ProductsSlice.actions.setVariations(variations.data));

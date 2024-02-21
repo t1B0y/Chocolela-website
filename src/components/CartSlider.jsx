@@ -1,9 +1,21 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ListSliderCart, SliderCart } from '../styledComponents/SliderCart';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import gsap from 'gsap';
+import { removeProduct } from '../redux/cart';
 
-function CartSlider() {
+function CartSlider({ show, close }) {
+  const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
+  const slider = useRef();
+
+  useEffect(() => {
+    if (show) {
+      gsap.to(slider.current, { x: '0' });
+    } else {
+      gsap.to(slider.current, { x: '100%' });
+    }
+  }, [show]);
 
   const listItems = cart.items.map((item, idx) => {
     return (
@@ -18,7 +30,12 @@ function CartSlider() {
           </div>
           <div className="remove-and-quantity">
             <span className="quantity">{item.quantity.value}</span>
-            <span className="remove">Supprimer</span>
+            <span
+              onClick={() => dispatch(removeProduct(item.item_key))}
+              className="remove"
+            >
+              Supprimer
+            </span>
           </div>
         </div>
       </div>
@@ -26,10 +43,11 @@ function CartSlider() {
   });
 
   return (
-    <SliderCart>
+    <SliderCart ref={slider}>
+      <button onClick={close}>Close</button>
       <h3>Mon Panier</h3>
-      <h4>{`Il y a ${cart.item_count} gourmandise${
-        cart.item_count > 0 && 's'
+      <h4>{`Il y a ${cart.item_count} gourmandise ${
+        cart.item_count > 0 ? 's' : ''
       } dans votre panier`}</h4>
       <ListSliderCart>{listItems}</ListSliderCart>
       <span className="line-cart" />

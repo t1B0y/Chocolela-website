@@ -14,10 +14,13 @@ import CartSlider from './CartSlider';
 function NavBar() {
   const [hovered, setHover] = useState(null);
   const dispatch = useDispatch();
+  const [showCart, setShowCart] = useState(false);
+
   useEffect(() => {
     dispatch(setCartKey(cookie.load('chocolela_cart')));
     dispatch(getCart());
   }, []);
+
   return (
     <>
       <Nav>
@@ -45,12 +48,12 @@ function NavBar() {
           </div>
           <div id="nav-btn-box">
             <img src={searchLogo}></img>
-            <img src={cartLogo}></img>
+            <img src={cartLogo} onClick={() => setShowCart(true)}></img>
           </div>
         </div>
         {hovered && <NavBarHover cat={hovered} close={() => setHover(null)} />}
       </Nav>
-      <CartSlider />
+      <CartSlider show={showCart} close={() => setShowCart(false)} />
     </>
   );
 }
