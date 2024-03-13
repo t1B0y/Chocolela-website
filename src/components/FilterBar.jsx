@@ -46,7 +46,6 @@ function FilterBar() {
   }, []);
 
   const toggle = (num) => {
-    console.log(num);
     if (isOpen[num]) {
       animations[num].reverse();
       setIsOpen((prev) => {
@@ -76,7 +75,7 @@ function FilterBar() {
 
   const toggleCheckBox = (e) => {
     let params = searchParams.get('categories').split(',');
-    console.log(params);
+
     if (e.target.checked) {
       params.push(e.target.value);
     } else {

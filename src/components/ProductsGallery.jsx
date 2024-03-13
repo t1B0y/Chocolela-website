@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Page } from '../styledComponents/Layout';
-import FilterBar from './filterBar';
+import FilterBar from './FilterBar';
 import { Gallery } from '../styledComponents/ProductsGallery';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts } from '../redux/products';
@@ -12,7 +12,6 @@ function ProductsGallery() {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.products.isLoading);
   const products = useSelector((state) => state.products.products);
-  console.log(products);
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {

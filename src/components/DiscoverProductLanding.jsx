@@ -4,13 +4,14 @@ import {
   DiscoverBlock,
 } from '../styledComponents/LandingPage';
 import LandingCentralAnimation from './LandingCentralAnimation';
+import Particles from './Particles';
 
 function DiscoverProductLanding() {
   const [centralContent, setCentralContent] = useState({
     img: 'http://chocolela.s3.amazonaws.com/wp-content/uploads/2024/01/25013955/choco-discover.png',
     text: 'Decouvrez notre gamme de chocolats artisanaux fait uniquement de chocolats valhrona. Nous proposons des ballotins, tablettes et meme differentes forme selons les fetes',
   });
-  const [isAnimReversed, setIsAnimReversed] = useState(false);
+  const [toggleAnim, setToggler] = useState(false);
 
   const map = {
     chocolate: {
@@ -32,7 +33,8 @@ function DiscoverProductLanding() {
       img: map[name].img,
       text: map[name].text,
     });
-    setIsAnimReversed((prev) => !prev);
+
+    setToggler(true);
   };
 
   return (
@@ -41,7 +43,7 @@ function DiscoverProductLanding() {
       <DiscoverTextBlock
         name="chocolate"
         onMouseEnter={() => handleHover('chocolate')}
-        // onMouseLeave={() => setIsAnimReversed(true)}
+        onMouseLeave={() => setToggler(false)}
       >
         <img
           src="http://chocolela.s3.amazonaws.com/wp-content/uploads/2024/01/25001514/choco-icon.svg"
@@ -55,7 +57,7 @@ function DiscoverProductLanding() {
       </DiscoverTextBlock>
       <DiscoverTextBlock
         name="cake"
-        // onMouseLeave={() => setIsAnimReversed(true)}
+        onMouseLeave={() => setToggler(false)}
         onMouseEnter={() => handleHover('cake')}
       >
         <img
@@ -70,7 +72,7 @@ function DiscoverProductLanding() {
       </DiscoverTextBlock>
       <DiscoverTextBlock
         name="gift"
-        // onMouseLeave={() => setIsAnimReversed(true)}
+        onMouseLeave={() => setToggler(false)}
         onMouseEnter={() => handleHover('gift')}
       >
         <img
@@ -83,10 +85,10 @@ function DiscoverProductLanding() {
           Pensez a nous pour vos idee cadeaux.
         </p>
       </DiscoverTextBlock>
+      <Particles anim={toggleAnim} />
       <LandingCentralAnimation
         img={centralContent.img}
         text={centralContent.text}
-        isReversed={isAnimReversed}
       />
     </DiscoverBlock>
   );
