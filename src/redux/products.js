@@ -24,6 +24,7 @@ const initialState = {
     variations: [],
   },
   variations: [],
+  variationSelected: [],
   isLoading: false,
 };
 

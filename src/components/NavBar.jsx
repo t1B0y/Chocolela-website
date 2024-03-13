@@ -4,7 +4,7 @@ import logo1 from '../assets/logo1.svg';
 import searchLogo from '../assets/search.svg';
 import cartLogo from '../assets/cart.svg';
 import ThumbnailNavBar from './ThumbnailNavBar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import NavBarHover from './NavBarHover';
 import { useDispatch } from 'react-redux';
 import { addProduct, getCart, setCartKey } from '../redux/cart';
@@ -15,9 +15,9 @@ function NavBar() {
   const [hovered, setHover] = useState(null);
   const dispatch = useDispatch();
   const [showCart, setShowCart] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(setCartKey(cookie.load('chocolela_cart')));
     dispatch(getCart());
   }, []);
 
@@ -25,7 +25,7 @@ function NavBar() {
     <>
       <Nav>
         <div id="nav-top-bar">
-          <img id="logo-nav" src={logo1} />
+          <img onClick={() => navigate('/')} id="logo-nav" src={logo1} />
           <div id="nav-menu">
             <Link
               onMouseEnter={() => setHover('chocolats')}

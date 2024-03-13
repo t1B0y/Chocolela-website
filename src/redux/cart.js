@@ -6,7 +6,7 @@ import { setCartCookie } from '../utils/functions';
 
 const axiosConfig = {
   baseURL: 'http://ec2-34-239-22-3.compute-1.amazonaws.com/wp-json/cocart/v2/',
-  withCredentials: true,
+  // withCredentials: true,
   Accept: 'application/json',
   headers: {
     'Content-type': 'application/json',
@@ -46,7 +46,6 @@ export const getCart = () => async (dispatch, getState) => {
 export const addProduct = (productId, qty) => async (dispatch, getState) => {
   try {
     const cartKey = cookie.load('chocolela_cart');
-    console.log(cartKey);
     const res = await Cart.post(
       cartKey ? `cart/add-item?cart_key=${cartKey}` : `cart/add-item`,
       {
@@ -54,6 +53,7 @@ export const addProduct = (productId, qty) => async (dispatch, getState) => {
         quantity: String(qty),
       }
     );
+    cookie.save('chocolela_cart', cartKey);
     dispatch(getCart());
   } catch (err) {
     console.log(err);
@@ -63,7 +63,8 @@ export const addProduct = (productId, qty) => async (dispatch, getState) => {
 export const updateQuantity =
   (productKey, qty) => async (dispatch, getState) => {
     try {
-      const cartkey = getState().cart.cartId;
+      const cartKey = cookie.load('chocolela_cart');
+
       const res = await Cart.post(
         `cart/item/${productKey}?cart_key=${cartkey}`,
         {
@@ -71,7 +72,6 @@ export const updateQuantity =
         }
       );
       setCartCookie(res.data.cart_key);
-      dispatch(cartSlice.actions.setCartKey(cookie.load('chocolela_cart')));
       dispatch(getCart());
     } catch (err) {
       console.log(err);
@@ -79,13 +79,13 @@ export const updateQuantity =
   };
 
 export const removeProduct = (productKey) => async (dispatch, getState) => {
-  const cartkey = getState().cart.cartId;
   try {
+    const cartKey = cookie.load('chocolela_cart');
     const res = await Cart.delete(
-      `cart/item/${productKey}?cart_key=${cartkey}`
+      `cart/item/${productKey}?cart_key=${cartKey}`
     );
     setCartCookie(res.data.cart_key);
-    dispatch(cartSlice.actions.setCartKey(cookie.load('chocolela_cart')));
+    cookie.save('chocolela_cart', cartKey);
     dispatch(getCart());
   } catch (err) {
     console.log(err);

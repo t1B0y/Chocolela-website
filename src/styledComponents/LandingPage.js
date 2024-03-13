@@ -42,15 +42,18 @@ export const DiscoverBlock = styled.div`
   width: 100%;
   height: 800px;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   .discover-central-block {
     position: absolute;
     top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 20vw;
+    width: 24vw;
     z-index: 1;
     img {
-      width: 10vw;
+      width: 15vw;
     }
   }
   .animation {
@@ -78,7 +81,7 @@ export const DiscoverTextBlock = styled.div`
   align-items: center;
   width: 13vw;
   position: absolute;
-  background-color: white;
+  background-color: transparent;
   z-index: 1;
   top: ${({ name }) => (name === 'chocolate' ? '1%' : '60%')};
   left: ${({ name }) =>

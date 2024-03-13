@@ -11,7 +11,7 @@ export const Gallery = styled.div`
   padding-right: 3rem;
 `;
 
-export const Thumbnail = styled(Link)`
+export const Thumbnail = styled.div`
   position: relative;
   height: 30vw;
   display: flex;
@@ -34,7 +34,7 @@ export const Thumbnail = styled(Link)`
       object-fit: cover;
     }
   }
-  a {
+  .add-to-cart-btn-thumbnail {
     box-sizing: border-box;
     padding: 0 1em;
     display: flex;
