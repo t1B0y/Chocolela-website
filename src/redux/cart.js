@@ -25,21 +25,17 @@ const initialState = {
 export const getCart = () => async (dispatch, getState) => {
   try {
     const cartKey = cookie.load('chocolela_cart');
-    if (cartKey) {
-      const res = await Cart.get(`cart?cart_key=${cartKey}`);
-      const total = await Cart.get(`cart/totals?cart_key=${cartKey}`);
+    const res = await Cart.get(`cart${cartKey ? `?cart_key=` + cartKey : ''}`);
+    cookie.save('chocolela_cart', res.data.cart_key);
+    const total = await Cart.get(`cart/totals?cart_key=${res.data.cart_key}`);
 
-      const cart = {
-        items: res.data.items,
-        item_count: res.data.item_count,
-        totals: total.data,
-      };
-      dispatch(cartSlice.actions.setCart(cart));
-    } else {
-      const res = await Cart.get(`cart`);
-      const cartKey = res.data.cart_key;
-      cookie.save('chocolela_cart', cartKey);
-    }
+    const cart = {
+      items: res.data.items,
+      item_count: res.data.item_count,
+      totals: total.data,
+    };
+
+    dispatch(cartSlice.actions.setCart(cart));
   } catch (err) {
     console.log(err);
   }
@@ -66,14 +62,18 @@ export const updateQuantity =
   (productKey, qty) => async (dispatch, getState) => {
     try {
       const cartKey = cookie.load('chocolela_cart');
-
-      const res = await Cart.post(
-        `cart/item/${productKey}?cart_key=${cartkey}`,
-        {
-          quantity: qty,
-        }
-      );
-      setCartCookie(res.data.cart_key);
+      console.log(qty, productKey);
+      if (qty == 0) {
+        dispatch(removeProduct(productKey));
+      } else {
+        const res = await Cart.post(
+          `cart/item/${productKey}?cart_key=${cartKey}`,
+          {
+            quantity: qty,
+          }
+        );
+        setCartCookie(res.data.cart_key);
+      }
       dispatch(getCart());
     } catch (err) {
       console.log(err);
@@ -81,11 +81,13 @@ export const updateQuantity =
   };
 
 export const removeProduct = (productKey) => async (dispatch, getState) => {
+  console.log(productKey);
   try {
     const cartKey = cookie.load('chocolela_cart');
     const res = await Cart.delete(
       `cart/item/${productKey}?cart_key=${cartKey}`
     );
+    console.log(res);
     setCartCookie(res.data.cart_key);
     cookie.save('chocolela_cart', cartKey);
     dispatch(getCart());

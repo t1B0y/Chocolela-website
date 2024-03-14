@@ -6,7 +6,7 @@ import {
 } from '../styledComponents/SliderCart';
 import { useDispatch, useSelector } from 'react-redux';
 import gsap from 'gsap';
-import { removeProduct } from '../redux/cart';
+import { removeProduct, updateQuantity } from '../redux/cart';
 import { QuantityButton } from '../styledComponents/QuantityProductButton';
 import CartLogo from '../assets/cart.svg';
 
@@ -50,11 +50,25 @@ function CartSlider({ show, close }) {
             {variations && variationsEls}
           </div>
           <QuantityButton>
-            <div onClick={() => {}} className="quantity-side-button">
+            <div
+              onClick={() => {
+                dispatch(
+                  updateQuantity(item.item_key, item.quantity.value - 1)
+                );
+              }}
+              className="quantity-side-button"
+            >
               -
             </div>
             <div className="quantity-button-center">{item.quantity.value}</div>
-            <div onClick={() => {}} className="quantity-side-button">
+            <div
+              onClick={() => {
+                dispatch(
+                  updateQuantity(item.item_key, item.quantity.value + 1)
+                );
+              }}
+              className="quantity-side-button"
+            >
               +
             </div>
           </QuantityButton>

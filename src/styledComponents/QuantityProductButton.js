@@ -15,10 +15,12 @@ export const QuantityButton = styled.div`
     &:hover {
       background-color: ${(props) => props.theme.colors.darkBrown};
       color: white;
+      cursor: pointer;
     }
     &:focus-within {
       background-color: ${(props) => props.theme.colors.lightBrown};
       color: white;
+      cursor: pointer;
     }
   }
   .quantity-plus {
