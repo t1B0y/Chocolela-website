@@ -19,7 +19,7 @@ const initialState = {
   cartId: undefined,
   items: [],
   item_count: 0,
-  price_total: '0',
+  totals: '0',
 };
 
 export const getCart = () => async (dispatch, getState) => {
@@ -27,10 +27,12 @@ export const getCart = () => async (dispatch, getState) => {
     const cartKey = cookie.load('chocolela_cart');
     if (cartKey) {
       const res = await Cart.get(`cart?cart_key=${cartKey}`);
+      const total = await Cart.get(`cart/totals?cart_key=${cartKey}`);
+
       const cart = {
         items: res.data.items,
         item_count: res.data.item_count,
-        price_total: res.data.totals.total,
+        totals: total.data,
       };
       dispatch(cartSlice.actions.setCart(cart));
     } else {
@@ -106,7 +108,7 @@ export const cartSlice = createSlice({
       {
         state.items = action.payload.items;
         state.item_count = action.payload.item_count;
-        state.price_total = action.payload.price_total;
+        state.totals = action.payload.totals;
       }
     },
   },

@@ -1,5 +1,9 @@
 import React, { useEffect, useRef } from 'react';
-import { ListSliderCart, SliderCart } from '../styledComponents/SliderCart';
+import {
+  ListSliderCart,
+  Overlay,
+  SliderCart,
+} from '../styledComponents/SliderCart';
 import { useDispatch, useSelector } from 'react-redux';
 import gsap from 'gsap';
 import { removeProduct } from '../redux/cart';
@@ -67,26 +71,31 @@ function CartSlider({ show, close }) {
   });
 
   return (
-    <SliderCart ref={slider}>
-      <div className="header-slider-cart">
-        <div className="products-number">
-          <img src={CartLogo} />
-          {`${cart.item_count} Produit${cart.item_count > 0 ? 's' : ''}`}
+    <>
+      <SliderCart ref={slider}>
+        <div className="header-slider-cart">
+          <div className="products-number">
+            <img src={CartLogo} />
+            {`${cart.item_count} Produit${cart.item_count > 0 ? 's' : ''}`}
+          </div>
+          <h3>Mon Panier</h3>
+          <a className="close-slider-btn" onClick={close}>
+            {'\u2715'}
+          </a>
         </div>
-        <h3>Mon Panier</h3>
-        <a className="close-slider-btn" onClick={close}>
-          {'\u2715'}
-        </a>
-      </div>
-      <ListSliderCart>{listItems}</ListSliderCart>
-      <span className="line-cart" />
-      <div className="price-total">
-        <span>Total</span>
-        <span>{cart.price_total}</span>
-      </div>
-      <button className="cart-btn checkout-btn">Passer Ma commande</button>
-      <button className="cart-btn shopping-btn">Continuer mon shopping</button>
-    </SliderCart>
+        <ListSliderCart>{listItems}</ListSliderCart>
+        <span className="line-cart" />
+        <div className="price-total">
+          <span>Total</span>
+          <span>{cart.totals.total} €</span>
+        </div>
+        <button className="cart-btn checkout-btn">Passer Ma commande</button>
+        <button className="cart-btn shopping-btn">
+          Continuer mon shopping
+        </button>
+      </SliderCart>
+      {show && <Overlay />}
+    </>
   );
 }
 
