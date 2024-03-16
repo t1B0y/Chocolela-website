@@ -19,25 +19,25 @@ const initialState = {
   cartId: undefined,
   items: [],
   item_count: 0,
-  price_total: '0',
+  totals: { total: 0.0 },
+  isOpen: false,
 };
 
 export const getCart = () => async (dispatch, getState) => {
   try {
     const cartKey = cookie.load('chocolela_cart');
-    if (cartKey) {
-      const res = await Cart.get(`cart?cart_key=${cartKey}`);
-      const cart = {
-        items: res.data.items,
-        item_count: res.data.item_count,
-        price_total: res.data.totals.total,
-      };
-      dispatch(cartSlice.actions.setCart(cart));
-    } else {
-      const res = await Cart.get(`cart`);
-      const cartKey = res.data.cart_key;
-      cookie.save('chocolela_cart', cartKey);
+    const res = await Cart.get(`cart${cartKey ? `?cart_key=` + cartKey : ''}`);
+    cookie.save('chocolela_cart', res.data.cart_key);
+    let total = { data: { total: 0.0 } };
+    if (res.data.item_count > 0) {
+      total = await Cart.get(`cart/totals?cart_key=${res.data.cart_key}`);
     }
+    const cart = {
+      items: res.data.items,
+      item_count: res.data.item_count,
+      totals: total.data,
+    };
+    dispatch(cartSlice.actions.setCart(cart));
   } catch (err) {
     console.log(err);
   }
@@ -64,21 +64,26 @@ export const updateQuantity =
   (productKey, qty) => async (dispatch, getState) => {
     try {
       const cartKey = cookie.load('chocolela_cart');
-
-      const res = await Cart.post(
-        `cart/item/${productKey}?cart_key=${cartkey}`,
-        {
-          quantity: qty,
-        }
-      );
-      setCartCookie(res.data.cart_key);
-      dispatch(getCart());
+      console.log(qty, productKey);
+      if (qty == 0) {
+        await dispatch(removeProduct(productKey));
+      } else {
+        const res = await Cart.post(
+          `cart/item/${productKey}?cart_key=${cartKey}`,
+          {
+            quantity: qty,
+          }
+        );
+        setCartCookie(res.data.cart_key);
+        dispatch(getCart());
+      }
     } catch (err) {
       console.log(err);
     }
   };
 
 export const removeProduct = (productKey) => async (dispatch, getState) => {
+  console.log(productKey);
   try {
     const cartKey = cookie.load('chocolela_cart');
     const res = await Cart.delete(
@@ -106,11 +111,17 @@ export const cartSlice = createSlice({
       {
         state.items = action.payload.items;
         state.item_count = action.payload.item_count;
-        state.price_total = action.payload.price_total;
+        state.totals = action.payload.totals;
       }
+    },
+    openCart: (state, action) => {
+      state.isOpen = true;
+    },
+    closeCart: (state, action) => {
+      state.isOpen = false;
     },
   },
 });
 
-export const { setCartKey } = cartSlice.actions;
+export const { setCartKey, openCart, closeCart } = cartSlice.actions;
 export default cartSlice.reducer;

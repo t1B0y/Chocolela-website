@@ -1,23 +1,28 @@
 import React, { useEffect, useRef } from 'react';
-import { ListSliderCart, SliderCart } from '../styledComponents/SliderCart';
+import {
+  ListSliderCart,
+  Overlay,
+  SliderCart,
+} from '../styledComponents/SliderCart';
 import { useDispatch, useSelector } from 'react-redux';
 import gsap from 'gsap';
-import { removeProduct } from '../redux/cart';
+import { closeCart, removeProduct, updateQuantity } from '../redux/cart';
 import { QuantityButton } from '../styledComponents/QuantityProductButton';
 import CartLogo from '../assets/cart.svg';
 
-function CartSlider({ show, close }) {
+function CartSlider() {
   const dispatch = useDispatch();
+  const isOpen = useSelector((state) => state.cart.isOpen);
   const cart = useSelector((state) => state.cart);
   const slider = useRef();
 
   useEffect(() => {
-    if (show) {
+    if (isOpen) {
       gsap.to(slider.current, { x: '-100%' });
     } else {
       gsap.to(slider.current, { x: '0' });
     }
-  }, [show]);
+  }, [isOpen]);
 
   const listItems = cart.items.map((item, idx) => {
     const variations =
@@ -46,11 +51,25 @@ function CartSlider({ show, close }) {
             {variations && variationsEls}
           </div>
           <QuantityButton>
-            <div onClick={() => {}} className="quantity-side-button">
+            <div
+              onClick={() => {
+                dispatch(
+                  updateQuantity(item.item_key, item.quantity.value - 1)
+                );
+              }}
+              className="quantity-side-button"
+            >
               -
             </div>
             <div className="quantity-button-center">{item.quantity.value}</div>
-            <div onClick={() => {}} className="quantity-side-button">
+            <div
+              onClick={() => {
+                dispatch(
+                  updateQuantity(item.item_key, item.quantity.value + 1)
+                );
+              }}
+              className="quantity-side-button"
+            >
               +
             </div>
           </QuantityButton>
@@ -67,26 +86,31 @@ function CartSlider({ show, close }) {
   });
 
   return (
-    <SliderCart ref={slider}>
-      <div className="header-slider-cart">
-        <div className="products-number">
-          <img src={CartLogo} />
-          {`${cart.item_count} Produit${cart.item_count > 0 ? 's' : ''}`}
+    <>
+      <SliderCart ref={slider}>
+        <div className="header-slider-cart">
+          <div className="products-number">
+            <img src={CartLogo} />
+            {`${cart.item_count} Produit${cart.item_count > 0 ? 's' : ''}`}
+          </div>
+          <h3>Mon Panier</h3>
+          <a className="close-slider-btn" onClick={() => dispatch(closeCart())}>
+            {'\u2715'}
+          </a>
         </div>
-        <h3>Mon Panier</h3>
-        <a className="close-slider-btn" onClick={close}>
-          {'\u2715'}
-        </a>
-      </div>
-      <ListSliderCart>{listItems}</ListSliderCart>
-      <span className="line-cart" />
-      <div className="price-total">
-        <span>Total</span>
-        <span>{cart.price_total}</span>
-      </div>
-      <button className="cart-btn checkout-btn">Passer Ma commande</button>
-      <button className="cart-btn shopping-btn">Continuer mon shopping</button>
-    </SliderCart>
+        <ListSliderCart>{listItems}</ListSliderCart>
+        <span className="line-cart" />
+        <div className="price-total">
+          <span>Total</span>
+          <span>{cart.totals.total} €</span>
+        </div>
+        <button className="cart-btn checkout-btn">Passer Ma commande</button>
+        <button className="cart-btn shopping-btn">
+          Continuer mon shopping
+        </button>
+      </SliderCart>
+      {isOpen && <Overlay onClick={() => dispatch(closeCart())} />}
+    </>
   );
 }
 

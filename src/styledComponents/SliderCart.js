@@ -1,8 +1,19 @@
 import styled from 'styled-components';
 
+export const Overlay = styled.div`
+  z-index: 999;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+`;
+
 export const SliderCart = styled.section`
-z-index: 1000;
-  position: absolute;
+  z-index: 1000;
+  position: fixed;
   background-color: white;
   top: 0;
   left: 100vw;
@@ -49,10 +60,10 @@ z-index: 1000;
 
       &:hover{
         opacity: 1;
+        cursor: pointer; 
       }
     }
     h3{
-      margin-right: 0.5em;
       font-size: 1em;
       font-weight: 500;
       text-transform: uppercase;
@@ -93,6 +104,7 @@ z-index: 1000;
       background-color: ${(props) => props.theme.colors.lightBrown};
       border: ${(props) => `1px solid ${props.theme.colors.lightBrown}`};
       color: white;
+      cursor: pointer; 
     }
     margin-bottom: 1em;
   }
@@ -106,6 +118,7 @@ z-index: 1000;
     :focus {
       background-color: ${(props) => props.theme.colors.darkBrown};
       color: white;
+      cursor: pointer; 
     }
   }
   .
