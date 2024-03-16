@@ -19,7 +19,8 @@ const initialState = {
   cartId: undefined,
   items: [],
   item_count: 0,
-  totals: '0',
+  totals: { total: 0.0 },
+  isOpen: false,
 };
 
 export const getCart = () => async (dispatch, getState) => {
@@ -27,14 +28,15 @@ export const getCart = () => async (dispatch, getState) => {
     const cartKey = cookie.load('chocolela_cart');
     const res = await Cart.get(`cart${cartKey ? `?cart_key=` + cartKey : ''}`);
     cookie.save('chocolela_cart', res.data.cart_key);
-    const total = await Cart.get(`cart/totals?cart_key=${res.data.cart_key}`);
-
+    let total = { data: { total: 0.0 } };
+    if (res.data.item_count > 0) {
+      total = await Cart.get(`cart/totals?cart_key=${res.data.cart_key}`);
+    }
     const cart = {
       items: res.data.items,
       item_count: res.data.item_count,
       totals: total.data,
     };
-
     dispatch(cartSlice.actions.setCart(cart));
   } catch (err) {
     console.log(err);
@@ -64,7 +66,7 @@ export const updateQuantity =
       const cartKey = cookie.load('chocolela_cart');
       console.log(qty, productKey);
       if (qty == 0) {
-        dispatch(removeProduct(productKey));
+        await dispatch(removeProduct(productKey));
       } else {
         const res = await Cart.post(
           `cart/item/${productKey}?cart_key=${cartKey}`,
@@ -73,8 +75,8 @@ export const updateQuantity =
           }
         );
         setCartCookie(res.data.cart_key);
+        dispatch(getCart());
       }
-      dispatch(getCart());
     } catch (err) {
       console.log(err);
     }
@@ -87,7 +89,6 @@ export const removeProduct = (productKey) => async (dispatch, getState) => {
     const res = await Cart.delete(
       `cart/item/${productKey}?cart_key=${cartKey}`
     );
-    console.log(res);
     setCartCookie(res.data.cart_key);
     cookie.save('chocolela_cart', cartKey);
     dispatch(getCart());
@@ -113,8 +114,14 @@ export const cartSlice = createSlice({
         state.totals = action.payload.totals;
       }
     },
+    openCart: (state, action) => {
+      state.isOpen = true;
+    },
+    closeCart: (state, action) => {
+      state.isOpen = false;
+    },
   },
 });
 
-export const { setCartKey } = cartSlice.actions;
+export const { setCartKey, openCart, closeCart } = cartSlice.actions;
 export default cartSlice.reducer;

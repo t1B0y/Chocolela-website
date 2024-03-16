@@ -6,22 +6,23 @@ import {
 } from '../styledComponents/SliderCart';
 import { useDispatch, useSelector } from 'react-redux';
 import gsap from 'gsap';
-import { removeProduct, updateQuantity } from '../redux/cart';
+import { closeCart, removeProduct, updateQuantity } from '../redux/cart';
 import { QuantityButton } from '../styledComponents/QuantityProductButton';
 import CartLogo from '../assets/cart.svg';
 
-function CartSlider({ show, close }) {
+function CartSlider() {
   const dispatch = useDispatch();
+  const isOpen = useSelector((state) => state.cart.isOpen);
   const cart = useSelector((state) => state.cart);
   const slider = useRef();
 
   useEffect(() => {
-    if (show) {
+    if (isOpen) {
       gsap.to(slider.current, { x: '-100%' });
     } else {
       gsap.to(slider.current, { x: '0' });
     }
-  }, [show]);
+  }, [isOpen]);
 
   const listItems = cart.items.map((item, idx) => {
     const variations =
@@ -93,7 +94,7 @@ function CartSlider({ show, close }) {
             {`${cart.item_count} Produit${cart.item_count > 0 ? 's' : ''}`}
           </div>
           <h3>Mon Panier</h3>
-          <a className="close-slider-btn" onClick={close}>
+          <a className="close-slider-btn" onClick={() => dispatch(closeCart())}>
             {'\u2715'}
           </a>
         </div>
@@ -108,7 +109,7 @@ function CartSlider({ show, close }) {
           Continuer mon shopping
         </button>
       </SliderCart>
-      {show && <Overlay />}
+      {isOpen && <Overlay onClick={() => dispatch(closeCart())} />}
     </>
   );
 }

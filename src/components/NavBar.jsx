@@ -7,14 +7,13 @@ import ThumbnailNavBar from './ThumbnailNavBar';
 import { Link, useNavigate } from 'react-router-dom';
 import NavBarHover from './NavBarHover';
 import { useDispatch } from 'react-redux';
-import { addProduct, getCart, setCartKey } from '../redux/cart';
+import { addProduct, getCart, openCart, setCartKey } from '../redux/cart';
 import cookie from 'react-cookies';
 import CartSlider from './CartSlider';
 
 function NavBar() {
   const [hovered, setHover] = useState(null);
   const dispatch = useDispatch();
-  const [showCart, setShowCart] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,12 +47,12 @@ function NavBar() {
           </div>
           <div id="nav-btn-box">
             <img src={searchLogo}></img>
-            <img src={cartLogo} onClick={() => setShowCart(true)}></img>
+            <img src={cartLogo} onClick={() => dispatch(openCart())}></img>
           </div>
         </div>
         {hovered && <NavBarHover cat={hovered} close={() => setHover(null)} />}
       </Nav>
-      <CartSlider show={showCart} close={() => setShowCart(false)} />
+      <CartSlider />
     </>
   );
 }
