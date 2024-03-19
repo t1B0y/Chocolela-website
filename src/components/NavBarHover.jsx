@@ -24,24 +24,23 @@ function NavBarHover({ cat, close }) {
         <div id="side-menu-nav">
           {cat === 'chocolats' ? (
             <>
-              <a>Tout nos chocolats</a>
-              <a>Nos meilleures vente</a>
-              <a>Ballotins</a>
-              <a>Tablettes</a>
               <a>Decouvrez nos parfums</a>
-              <a>Coffret cadeaux</a>
-              <a>Pour les fetes</a>
-              <a>Noel</a>
-              <a>Paques</a>
-              <a>Saint-Valentin</a>
+              <a href="/chocolats?categories=17">Tout nos chocolats</a>
+              <a href="">Nos meilleures vente</a>
+              <a href="/chocolats?categories=18">Ballotins</a>
+              <a href="/chocolats?categories=19">Tablettes</a>
+              <a href="/chocolats?categories=20">Coffret cadeaux</a>
+              <a href="/chocolats?categories=31">Noel</a>
+              <a href="/chocolats?categories=32">Paques</a>
+              <a href="/chocolats?categories=33">Saint-Valentin</a>
             </>
           ) : (
             <>
-              <a>Toute nos patisserie</a>
-              <a>Nos meilleures ventes</a>
-              <a>Noel</a>
-              <a>Paques</a>
-              <a>Saint-Valentin</a>
+              <a href="">Toute nos patisserie</a>
+              <a href="">Nos meilleures ventes</a>
+              <a href="">Noel</a>
+              <a href="">Paques</a>
+              <a href="">Saint-Valentin</a>
             </>
           )}
         </div>

@@ -4,7 +4,7 @@ import {
   FilterBtnContainer,
 } from '../styledComponents/FilterBar';
 
-import { selectCategories, toggleFilter } from '../redux/filter';
+import { toggleFilter } from '../redux/filter';
 import downArrow from '../assets/down_arrow.svg';
 import gsap from 'gsap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,7 +12,8 @@ import { fetchProducts } from '../redux/products';
 import { useParams, useSearchParams } from 'react-router-dom';
 
 function FilterBar() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const selected = useSelector((state) => state.filter.selected);
+  let [searchParams, setSearchParams] = useSearchParams();
   const menuBar = useRef();
   const [animations, setAnimations] = useState([]);
   const [isOpen, setIsOpen] = useState([]);
@@ -63,7 +64,7 @@ function FilterBar() {
 
   useEffect(() => {
     const inputs = menuBar.current.querySelectorAll('input');
-    const params = searchParams.get('categories').split(',');
+    let params = searchParams.get('categories').split(',');
     for (let input of inputs) {
       if (params.includes(input.value)) {
         input.checked = true;
@@ -75,12 +76,15 @@ function FilterBar() {
 
   const toggleCheckBox = (e) => {
     let params = searchParams.get('categories').split(',');
-
-    if (e.target.checked) {
-      params.push(e.target.value);
+    console.log(params);
+    if (params.includes(e.target.value)) {
+      // e.target.checked = true;
+      params.splice(params.indexOf(e.target.value), 1);
     } else {
-      params = params.filter((n) => n !== e.target.value && n !== '');
+      // e.target.checked = false;
+      params.push(e.target.value);
     }
+    console.log(params);
     setSearchParams({ categories: params.join(',') });
   };
 

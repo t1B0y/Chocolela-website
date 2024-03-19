@@ -86,6 +86,9 @@ export const MenuNav = styled.div`
     a {
       margin: 0.3rem;
       font-weight: 200;
+      &:hover {
+        cursor: pointer;
+      }
       &:first-of-type {
         margin-top: 0;
         margin-bottom: 1rem;

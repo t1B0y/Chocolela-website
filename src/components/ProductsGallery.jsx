@@ -6,13 +6,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts } from '../redux/products';
 import ProductThumbnail from './ProductThumbnail';
 import { useLocation, useSearchParams } from 'react-router-dom';
-import { resetSelected, selectCategories } from '../redux/filter';
 
 function ProductsGallery() {
   const dispatch = useDispatch();
+  let [searchParams, setSearchParams] = useSearchParams();
   const loading = useSelector((state) => state.products.isLoading);
   const products = useSelector((state) => state.products.products);
-  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     dispatch(fetchProducts(searchParams.get('categories')));
