@@ -3,10 +3,10 @@ import axios from 'axios';
 import OAuth from 'oauth-1.0a';
 import CryptoJS from 'crypto-js';
 import { Base64 } from 'crypto-js/enc-base64';
+import { serialize } from '../utils/functions';
 
 const axiosConfig = {
   baseURL: 'https://41vn2anfp4.execute-api.us-east-1.amazonaws.com/',
-  withCredentials: true,
   Accept: 'application/json',
 };
 
@@ -26,28 +26,38 @@ const initialState = {
   variations: [],
   variationSelected: [],
   isLoading: false,
+  isLoadingPage: false,
 };
 
-export const fetchProducts =
-  (...args) =>
-  async (dispatch, getState) => {
-    try {
+export const fetchProducts = (params, reset) => async (dispatch, getState) => {
+  try {
+    if (reset) {
       dispatch(ProductsSlice.actions.startLoading());
-      const res = await WooCommmerce.get(`products?category=${args.join(',')}`);
-      const parsed = res.data.map((product) => {
-        const obj = {};
-        obj.name = product.name;
-        obj.images = product.images.map((img) => img.src);
-        obj.price = product.price;
-        obj.id = product.id;
-        return obj;
-      });
-      dispatch(ProductsSlice.actions.stopLoading());
-      dispatch(ProductsSlice.actions.setProducts(parsed));
-    } catch (err) {
-      console.log(err);
+    } else {
+      dispatch(ProductsSlice.actions.startLoadingPage());
     }
-  };
+    const res = await WooCommmerce.get(`products?${serialize(params)}`);
+
+    const parsed = res.data.map((product) => {
+      const obj = {};
+      obj.name = product.name;
+      obj.images = product.images.map((img) => img.src);
+      obj.price = product.price;
+      obj.id = product.id;
+      return obj;
+    });
+
+    if (reset) {
+      dispatch(ProductsSlice.actions.setProducts(parsed));
+      dispatch(ProductsSlice.actions.stopLoading());
+    } else {
+      dispatch(ProductsSlice.actions.nextPage(parsed));
+      dispatch(ProductsSlice.actions.stopLoadingPage());
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export const fetchProduct = (id) => async (dispatch, getState) => {
   try {
@@ -87,6 +97,9 @@ export const ProductsSlice = createSlice({
     setProducts: (state, action) => {
       state.products = action.payload;
     },
+    nextPage: (state, action) => {
+      state.products = [...state.products, ...action.payload];
+    },
     setVariations: (state, action) => {
       state.variations = action.payload;
     },
@@ -95,6 +108,12 @@ export const ProductsSlice = createSlice({
     },
     stopLoading: (state, action) => {
       state.isLoading = false;
+    },
+    startLoadingPage: (state, action) => {
+      state.isLoadingPage = true;
+    },
+    stopLoadingPage: (state, action) => {
+      state.isLoadingPage = false;
     },
   },
 });

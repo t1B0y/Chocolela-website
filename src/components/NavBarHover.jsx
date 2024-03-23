@@ -25,14 +25,14 @@ function NavBarHover({ cat, close }) {
           {cat === 'chocolats' ? (
             <>
               <a>Decouvrez nos parfums</a>
-              <a href="/chocolats?categories=17">Tout nos chocolats</a>
+              <a href="/produits?category=17">Tout nos chocolats</a>
               <a href="">Nos meilleures vente</a>
-              <a href="/chocolats?categories=18">Ballotins</a>
-              <a href="/chocolats?categories=19">Tablettes</a>
-              <a href="/chocolats?categories=20">Coffret cadeaux</a>
-              <a href="/chocolats?categories=31">Noel</a>
-              <a href="/chocolats?categories=32">Paques</a>
-              <a href="/chocolats?categories=33">Saint-Valentin</a>
+              <a href="/produits?category=18">Ballotins</a>
+              <a href="/produits?category=19">Tablettes</a>
+              <a href="/produits?category=20">Coffret cadeaux</a>
+              <a href="/produits?category=31">Noel</a>
+              <a href="/produits?category=32">Paques</a>
+              <a href="/produits?category=33">Saint-Valentin</a>
             </>
           ) : (
             <>
@@ -45,15 +45,44 @@ function NavBarHover({ cat, close }) {
           )}
         </div>
         <div id="menu-nav-pictures-box">
-          <ThumbnailNavBar url={imgs[0]} text="Les best sellers" />
           <ThumbnailNavBar
-            url={imgs[1]}
+            url={
+              cat === 'chocolats'
+                ? '/produits?category=17?orderby=popularity'
+                : '/produits?orderby=popularity'
+            }
+            imgUrl={imgs[0]}
+            text="Les best sellers"
+          />
+          <ThumbnailNavBar
+            imgUrl={imgs[1]}
+            url={
+              cat === 'chocolats'
+                ? '/produits?category=17?orderby=date'
+                : '/produits?orderby=popularity'
+            }
             text={`Nos nouveaux ${
               cat === 'chocolats' ? 'chocolats' : 'gateaux'
             }`}
           />
-          <ThumbnailNavBar url={imgs[2]} text="Pour la Saint valentin" />
-          <ThumbnailNavBar url={imgs[3]} text="Les ballotins" />
+          <ThumbnailNavBar
+            url={
+              cat === 'chocolats'
+                ? '/produits?category=17?orderby=popularity'
+                : '/produits?orderby=popularity'
+            }
+            imgUrl={imgs[2]}
+            text="Pour la Saint valentin"
+          />
+          <ThumbnailNavBar
+            url={
+              cat === 'chocolats'
+                ? '/produits?category=17?orderby=popularity'
+                : '/produits?orderby=popularity'
+            }
+            imgUrl={imgs[3]}
+            text="Les ballotins"
+          />
         </div>
       </div>
       {/* <div className="overlay-subMenu" /> */}

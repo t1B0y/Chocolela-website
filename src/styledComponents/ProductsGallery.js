@@ -4,7 +4,6 @@ import styled from 'styled-components';
 export const Gallery = styled.div`
   display: grid;
   width: 85vw;
-  height: 100vh;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: auto;
   grid-gap: 2rem;

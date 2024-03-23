@@ -28,13 +28,13 @@ function NavBar() {
           <div id="nav-menu">
             <Link
               onMouseEnter={() => setHover('chocolats')}
-              to={'/produits?categories=17'}
+              to={'/produits?category=17'}
             >
               Chocolats
             </Link>
             <Link
               onMouseEnter={() => setHover('patisseries')}
-              to={'/produits?categories=27'}
+              to={'/produits?category=27'}
             >
               Patisserie
             </Link>
