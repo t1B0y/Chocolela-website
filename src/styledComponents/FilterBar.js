@@ -5,8 +5,8 @@ export const FilterBar = styled.div`
   flex-direction: column;
   align-items: flex-start;
   min-width: 200px;
-  width: 15vw;
-  margin: 0 1vw;
+  width: 16vw;
+  margin: 0 2vw;
   .title {
     text-transform: uppercase;
     font-weight: 400;

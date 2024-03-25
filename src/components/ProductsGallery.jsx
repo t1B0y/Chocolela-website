@@ -3,7 +3,7 @@ import { Page, Pagination } from '../styledComponents/Layout';
 import FilterBar from './FilterBar';
 import { Gallery } from '../styledComponents/ProductsGallery';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProducts } from '../redux/products';
+import { fetchNextPage, fetchProducts } from '../redux/products';
 import ProductThumbnail from './ProductThumbnail';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -17,30 +17,15 @@ gsap.registerPlugin(ScrollTrigger);
 function ProductsGallery() {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [page, setPage] = useState(1);
+  const page = useSelector((state) => state.products.page);
   const container = useRef();
   const loading = useSelector((state) => state.products.isLoading);
   const loadingPage = useSelector((state) => state.products.isLoadingPage);
   const products = useSelector((state) => state.products.products);
-  const scrollTrigger = useRef();
 
   useEffect(() => {
-    const params = { per_page: 12, page: page };
-    for (let [key, val] of searchParams.entries()) {
-      params[key] = val;
-    }
-    dispatch(fetchProducts(params, true));
+    dispatch(fetchProducts(searchParams.get('category')));
   }, [searchParams]);
-
-  useEffect(() => {
-    if (page > 1) {
-      const params = { per_page: 12, page: page };
-      for (let [key, val] of searchParams.entries()) {
-        params[key] = val;
-      }
-      dispatch(fetchProducts(params));
-    }
-  }, [page]);
 
   useGSAP(
     () => {
@@ -57,10 +42,10 @@ function ProductsGallery() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: container.current,
-          // toggleActions: 'play play play play',
+          toggleActions: 'play play play play',
           start: 'center bottom',
           markers: true,
-          onEnter: () => setPage((prev) => 1 + prev),
+          onEnter: () => dispatch(fetchNextPage(searchParams.get('category'))),
         },
         repeat: -1,
       });
@@ -106,8 +91,9 @@ function ProductsGallery() {
     <ProductThumbnail
       name={p.name}
       price={p.price}
-      img={p.images}
+      img={p.images[0].src}
       id={p.id}
+      description={p.short_description ? p.short_description : null}
       key={p.name + idx}
     ></ProductThumbnail>
   ));

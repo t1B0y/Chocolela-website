@@ -14,6 +14,9 @@ const WooCommmerce = axios.create(axiosConfig);
 
 const initialState = {
   products: [],
+  page: 1,
+  per_page: 12,
+  orderby: 'date',
   product: {
     name: '',
     images: [],
@@ -29,35 +32,23 @@ const initialState = {
   isLoadingPage: false,
 };
 
-export const fetchProducts = (params, reset) => async (dispatch, getState) => {
-  try {
-    if (reset) {
+export const fetchProducts =
+  (categories, reset) => async (dispatch, getState) => {
+    try {
       dispatch(ProductsSlice.actions.startLoading());
-    } else {
-      dispatch(ProductsSlice.actions.startLoadingPage());
-    }
-    const res = await WooCommmerce.get(`products?${serialize(params)}`);
+      dispatch(ProductsSlice.actions.resetPagination());
+      const { page, per_page, orderby } = getState().products;
+      const params = { page, per_page, orderby, category: categories };
 
-    const parsed = res.data.map((product) => {
-      const obj = {};
-      obj.name = product.name;
-      obj.images = product.images.map((img) => img.src);
-      obj.price = product.price;
-      obj.id = product.id;
-      return obj;
-    });
+      const res = await WooCommmerce.get(`products?${serialize(params)}`);
+      console.log(res.data);
 
-    if (reset) {
-      dispatch(ProductsSlice.actions.setProducts(parsed));
+      dispatch(ProductsSlice.actions.setProducts(res.data));
       dispatch(ProductsSlice.actions.stopLoading());
-    } else {
-      dispatch(ProductsSlice.actions.nextPage(parsed));
-      dispatch(ProductsSlice.actions.stopLoadingPage());
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.log(err);
-  }
-};
+  };
 
 export const fetchProduct = (id) => async (dispatch, getState) => {
   try {
@@ -68,6 +59,26 @@ export const fetchProduct = (id) => async (dispatch, getState) => {
   } catch (err) {
     console.log(err);
   }
+};
+
+export const fetchNextPage = (categories) => async (dispatch, getState) => {
+  try {
+    const { page, per_page, orderby } = getState().products;
+
+    if (page <= 1) {
+      dispatch(ProductsSlice.actions.increasePage());
+      return;
+    }
+
+    dispatch(ProductsSlice.actions.startLoadingPage());
+    const params = { page, per_page, orderby, category: categories };
+
+    const res = await WooCommmerce.get(`products?${serialize(params)}`);
+
+    dispatch(ProductsSlice.actions.nextPage(res.data));
+    dispatch(ProductsSlice.actions.increasePage());
+    dispatch(ProductsSlice.actions.stopLoadingPage());
+  } catch (err) {}
 };
 
 export const fetchVariations = (productId) => async (dispatch, getState) => {
@@ -91,6 +102,12 @@ export const ProductsSlice = createSlice({
   name: 'products',
   initialState,
   reducers: {
+    resetPagination: (state, action) => {
+      state.page = 1;
+    },
+    increasePage: (state, action) => {
+      state.page = state.page + 1;
+    },
     setProduct: (state, action) => {
       state.product = action.payload;
     },

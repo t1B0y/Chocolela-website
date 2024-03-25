@@ -13,7 +13,6 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import Checkbox from '../styledComponents/Checkbox';
 
 function FilterBar() {
-  const selected = useSelector((state) => state.filter.selected);
   let [searchParams, setSearchParams] = useSearchParams();
   const menuBar = useRef();
   const [animations, setAnimations] = useState([]);
@@ -44,7 +43,7 @@ function FilterBar() {
       setAnimations((prev) => [...prev, timeline]);
       setIsOpen((prev) => [...prev, false]);
     }
-    dispatch(fetchProducts({}, true));
+    // dispatch(fetchProducts());
   }, []);
 
   const toggle = (num) => {
