@@ -47,12 +47,10 @@ function NavBarHover({ cat, close }) {
         <div id="menu-nav-pictures-box">
           <ThumbnailNavBar
             url={
-              cat === 'chocolats'
-                ? '/produits?category=17?orderby=popularity'
-                : '/produits?orderby=popularity'
+              cat === 'chocolats' ? '/parfums' : '/produits?orderby=popularity'
             }
             imgUrl={imgs[0]}
-            text="Les best sellers"
+            text={cat === 'chocolats' ? 'Tout nos parfums' : 'Nos best seller'}
           />
           <ThumbnailNavBar
             imgUrl={imgs[1]}

@@ -1,13 +1,17 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FlavorCardBack, FlavorCardFront } from './FlavorCard';
 import { FlavorArray } from '../utils/chocolateFlavors';
-import { Card, Flavors } from '../styledComponents/ChocoFlavors';
+import {
+  Card,
+  ChocoPage,
+  FlavorsGrid,
+  RightCornerImage,
+} from '../styledComponents/ChocoFlavors';
+import rightCornerIllustration from '../assets/flavors/cocoa-right-border.svg';
 import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 
 function ChocolateFlavors() {
-  const [hovered, setHovered] = useState(false);
-  const flip = useRef(gsap.timeline({ paused: true }));
-
   const mouseHoverAnimation = (e) => {
     const card = gsap.utils.selector(e.currentTarget);
     gsap.set(card, {
@@ -43,22 +47,41 @@ function ChocolateFlavors() {
     // gsap.set(back, { rotationY: -180, visibility: 'hidden' });
   };
 
-  const cards = FlavorArray.map((flavor, i) => (
-    <Card
-      onMouseEnter={(e) => mouseHoverAnimation(e)}
-      onMouseLeave={(e) => mouseLeaveAnimation(e)}
-      className={`flavor-card-${i}`}
-    >
-      <FlavorCardBack
-        imgUrl={flavor.img}
-        text={flavor.text}
-        flavor={flavor.flavor}
-        drawing={flavor.drawing}
-      />
-      <FlavorCardFront flavor={flavor.flavor} drawing={flavor.drawing} />
-    </Card>
-  ));
-  return <Flavors>{cards}</Flavors>;
+  const cards = FlavorArray.map((flavor, i) => {
+    if (i === 3) {
+      return <div></div>;
+    } else
+      return (
+        <Card
+          onMouseEnter={(e) => mouseHoverAnimation(e)}
+          onMouseLeave={(e) => mouseLeaveAnimation(e)}
+          className={`flavor-card-${i}`}
+          key={i + 'flavorCard'}
+        >
+          <FlavorCardBack
+            imgUrl={flavor.img}
+            text={flavor.text}
+            flavor={flavor.flavor}
+            drawing={flavor.drawing}
+          />
+          <FlavorCardFront flavor={flavor.flavor} drawing={flavor.drawing} />
+        </Card>
+      );
+  });
+  return (
+    <ChocoPage>
+      <h2>Nos Parfums de chocolats</h2>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis tortor
+        dui, luctus non aliquam achurle. consectetur adipiscing elit.
+      </p>
+
+      <FlavorsGrid>
+        {cards}
+        <RightCornerImage src={rightCornerIllustration} />
+      </FlavorsGrid>
+    </ChocoPage>
+  );
 }
 
 export default ChocolateFlavors;

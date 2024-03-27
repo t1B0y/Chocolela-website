@@ -33,27 +33,27 @@ export const FlavorArray = [
     img: flavorImg3,
     drawing: drawing3,
 
-    flavor: 'Praline noisettes',
+    flavor: 'Riz soufflé',
     text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis tortor dui, luctus non aliquam ac.',
   },
   {
     img: flavorImg4,
     drawing: drawing4,
-    flavor: 'Riz soufflé',
+    flavor: 'Feuilletine',
     text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis tortor dui, luctus non aliquam ac.',
   },
   {
     img: flavorImg5,
     drawing: drawing5,
 
-    flavor: 'Pistache',
+    flavor: 'Noir Intense',
     text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis tortor dui, luctus non aliquam ac.',
   },
   {
     img: flavorImg6,
     drawing: drawing6,
 
-    flavor: 'Passion',
+    flavor: 'Pistache',
     text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis tortor dui, luctus non aliquam ac.',
   },
   {
@@ -66,7 +66,7 @@ export const FlavorArray = [
   {
     img: flavorImg8,
     drawing: drawing8,
-    flavor: 'Gianduja',
+    flavor: 'Passion',
     text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis tortor dui, luctus non aliquam ac.',
   },
 ];

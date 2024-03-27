@@ -6,6 +6,7 @@ export const Page = styled.section`
   top: 0;
   left: 0;
   width: 100vw;
+  justify-content: center;
 `;
 
 export const Pagination = styled.div`
