@@ -39,7 +39,7 @@ export const FlavorsGrid = styled.div`
     right: 0rem;
     top: 0rem;
     bottom: 0rem;
-    border: ${(props) => `2rem solid ${props.theme.colors.darkBrown}`};
+    border: ${(props) => `1rem solid ${props.theme.colors.darkBrown}`};
     background-color: transparent;
     z-index: 0;
   }
