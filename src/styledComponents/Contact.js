@@ -52,7 +52,7 @@ export const Form = styled.div`
     align-items: center;
   }
   h2 {
-    color: ${(props) => props.theme.darkBrown};
+    color: ${(props) => props.theme.colors.darkBrown};
     font-size: 32px;
     font-weight: 600;
     text-align: center;
