@@ -11,6 +11,7 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import Lottie from 'lottie-react';
 import loadingBird from '../assets/loading_bird.json';
+import loadingDots from '../assets/loading-dots.json';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,8 +20,8 @@ function ProductsGallery() {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = useSelector((state) => state.products.page);
   const container = useRef();
-  const loading = useSelector((state) => state.products.isLoading);
-  const loadingPage = useSelector((state) => state.products.isLoadingPage);
+  const loading = useSelector((state) => state.loading.gallery);
+  const loadingPage = useSelector((state) => state.loading.page);
   const products = useSelector((state) => state.products.products);
 
   useEffect(() => {
@@ -42,10 +43,12 @@ function ProductsGallery() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: container.current,
-          toggleActions: 'play play play play',
+          toggleActions: 'none reset play reset',
           start: 'center bottom',
           markers: true,
-          onEnter: () => dispatch(fetchNextPage(searchParams.get('category'))),
+          onEnter: () => {
+            dispatch(fetchNextPage(searchParams.get('category')));
+          },
         },
         repeat: -1,
       });
@@ -124,12 +127,13 @@ function ProductsGallery() {
         )}
         <Pagination ref={container} className="pagination">
           {loadingPage && (
-            <div className="pagination-dots">
-              <span className="pagination-dot pagination-dot1" />
-              <span className="pagination-dot pagination-dot2" />
-              <span className="pagination-dot pagination-dot3" />
-            </div>
+            <Lottie style={{ height: '100%' }} animationData={loadingDots} />
           )}
+          {/* <div className="pagination-dots">
+            <span className="pagination-dot pagination-dot1" />
+            <span className="pagination-dot pagination-dot2" />
+            <span className="pagination-dot pagination-dot3" />
+          </div> */}
         </Pagination>
       </div>
     </Page>

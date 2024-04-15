@@ -9,6 +9,7 @@ import Contact from './pages/Contact';
 import LandingPage from './pages/LandingPage';
 import Theme from './styledComponents/themeProvider';
 import Cart from './pages/Cart';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/parfums" element={<ChocolateFlavors />} />
           <Route path="/" element={<LandingPage />} />
         </Routes>
+        <Footer />
       </Theme>
     </>
   );

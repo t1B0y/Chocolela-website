@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { ProductImages as Images } from '../styledComponents/ProductPage';
 function ProductImages({ imgs }) {
-  const [current, setCurrent] = useState(['']);
+  const [current, setCurrent] = useState('');
 
   useEffect(() => {
-    setCurrent(imgs[0]);
+    setCurrent(imgs[0].src);
   }, []);
+
   return (
     <Images>
       <div className="images-column">
-        {imgs.map((src, idx) => (
-          <div key={src}>
-            <img src={src} onClick={() => setCurrent(imgs[idx])} />
-          </div>
-        ))}
+        {imgs &&
+          imgs.map((img, idx) => (
+            <div key={idx + img.src}>
+              <img src={img.src} onClick={() => setCurrent(img.src)} />
+            </div>
+          ))}
       </div>
       <div className="current-image">
         <img src={current} />

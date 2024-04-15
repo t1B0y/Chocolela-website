@@ -9,6 +9,8 @@ body{
   font-family: 'ProximaNova';
   font-weight: 400;
   color: #5b3023;
+  display: flex;
+  flex-direction: column;
 }
 
 a{

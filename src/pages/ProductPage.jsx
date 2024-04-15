@@ -4,41 +4,52 @@ import ProductImages from '../components/ProductImages';
 import { ProductInfos } from '../styledComponents/ProductPage';
 import { useLoaderData, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProduct, fetchVariations } from '../redux/products';
+import { fetchProduct, selectVariation } from '../redux/products';
 import Parser from 'html-react-parser';
 import { addProduct } from '../redux/cart';
 import { QuantityButton } from '../styledComponents/QuantityProductButton';
+import Lottie from 'lottie-react';
+import loadingBird from '../assets/loading_bird.json';
 
 function ProductPage() {
   const { productId } = useParams();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const product = useSelector((state) => state.products.product);
-  const loading = useSelector((state) => state.products.isLoading);
+  const loading = useSelector((state) => state.loading.product);
   const variations = useSelector((state) => state.products.variations);
+  const isVariation = useSelector((state) => state.products.isVariation);
+  const [variationSelected, setVariationSelected] = useState(0);
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     dispatch(fetchProduct(productId));
-  }, [productId]);
+  }, []);
 
-  useEffect(() => {
-    if (product.parent_id) {
-      dispatch(fetchVariations(product.parent_id));
-    } else if (product.variations.length > 0) {
-      dispatch(fetchProduct(product.variations[0]));
+  const handleClick = () => {
+    if (!isVariation) {
+      dispatch(addProduct(product.id, quantity));
+    } else {
+      dispatch(addProduct(variations[variationSelected].id, quantity));
     }
-  }, [product]);
+  };
 
   return (
     <Page>
       {loading ? (
-        <div>loading...</div>
+        <div
+          style={{
+            width: '85vw',
+            height: '80vh',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Lottie style={{ width: '150px' }} animationData={loadingBird} />
+        </div>
       ) : (
         <>
-          <ProductImages
-            imgs={product && product.images.map((obj) => obj.src)}
-          />
+          <ProductImages imgs={product.images} />
           <ProductInfos>
             <span className="product-title">{product.name}</span>
             <div className="product-categories">
@@ -49,19 +60,12 @@ function ProductPage() {
                 </span>
               ))}
             </div>
-            {variations.length > 0 && (
-              <select
-                name="variations"
-                onChange={(e) => navigate(`/product/${e.target.value}`)}
-                defaultValue={product.parent_id ? productId : variations[0].id}
-              >
-                {variations.map((variation, idx) => (
-                  <option key={variation + idx} value={variation.id}>
-                    {variation.name.toUpperCase().replace(',', ' -')}
-                  </option>
-                ))}
-              </select>
-            )}
+            <div className="product-price">
+              {isVariation
+                ? variations[variationSelected].price + ' €'
+                : product.price + ' €'}
+            </div>
+            <span className="product-quantity-text">Quantité : </span>
             <QuantityButton>
               <div
                 onClick={() =>
@@ -84,9 +88,23 @@ function ProductPage() {
                 +
               </div>
             </QuantityButton>
-            <button onClick={() => dispatch(addProduct(productId, quantity))}>
-              Ajouter au panier
-            </button>
+            {isVariation && (
+              <select
+                name="variations"
+                defaultValue={0}
+                onChange={(e) => {
+                  setVariationSelected(e.target.value);
+                }}
+              >
+                {variations.map((variation, idx) => (
+                  <option key={variation + idx} value={idx}>
+                    {variation.name.toUpperCase().replace(',', ' -')}
+                  </option>
+                ))}
+              </select>
+            )}
+
+            <button onClick={handleClick}>Ajouter au panier</button>
             <div className="description-block" content={product.description}>
               <div className="header">
                 <h5 className="description-title">description</h5>

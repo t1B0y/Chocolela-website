@@ -15,6 +15,8 @@ export const Pagination = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 2rem;
+  padding-right: 3rem;
   .pagination-dots {
     opacity: 0;
     width: 6%;

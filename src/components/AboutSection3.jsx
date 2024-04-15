@@ -13,8 +13,8 @@ function AboutSection3() {
   const block = useRef();
   useGSAP(
     () => {
-      gsap.set('.about-img7', { y: 90 });
-      gsap.set('.about-img6', { y: 90 });
+      gsap.set('.about-img7', { y: 120 });
+      gsap.set('.about-img6', { y: 120 });
 
       const scroll3 = gsap.timeline({
         scrollTrigger: {
