@@ -58,6 +58,16 @@ export const ProductInfos = styled.div`
   .product-title {
     font-weight: 500;
   }
+  .product-quantity-text {
+    font-weight: 300;
+    font-size: 0.8em;
+    margin-bottom: 1em;
+  }
+  .product-price {
+    font-weight: 400;
+    font-size: 1.2rem;
+    margin: 0 0 1.2rem 0;
+  }
   .description-block {
     box-sizing: border-box;
     background-color: rgba(196, 157, 154, 0.3);
@@ -111,6 +121,7 @@ export const ProductInfos = styled.div`
     line-height: 1.5em;
     padding: 0.5em 3.5em 0.5em 1em;
     margin: 0;
+    margin-bottom: 1em;
     box-sizing: border-box;
     -webkit-appearance: none;
     -moz-appearance: none;

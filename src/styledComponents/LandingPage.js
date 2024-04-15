@@ -8,6 +8,7 @@ export const LandingPageContainer = styled.section`
 
 export const LandingPageBlock = styled.section`
   width: 100%;
+  position: relative;
   .home-title {
     text-transform: uppercase;
     font-size: 3.5vw;
@@ -17,24 +18,6 @@ export const LandingPageBlock = styled.section`
   .title-text {
     width: 50%;
     margin: 1em auto;
-  }
-  .home-second-block {
-    background-color: #c49d9a;
-    color: white;
-    margin-top: 3em;
-    padding: 3em;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2em;
-    .image-block {
-      width: 100%;
-      height: 100%;
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-    }
   }
 `;
 

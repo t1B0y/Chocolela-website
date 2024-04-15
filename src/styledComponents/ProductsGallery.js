@@ -9,16 +9,20 @@ export const Gallery = styled.div`
   grid-template-rows: auto;
   grid-gap: 2rem;
   padding-right: 3rem;
+  @media (max-width: 1200px) {
+    grid-template-columns: 1fr 1fr;
+  }
 `;
 
 export const Thumbnail = styled.div`
   position: relative;
-  height: 100%;
+  height: 30vw;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: start;
   color: ${(props) => props.theme.colors.darkBrown};
+  min-height: 500px;
   .thumbnail_image {
     width: 100%;
     height: 75%;
@@ -78,7 +82,7 @@ export const Thumbnail = styled.div`
       }
       span {
         font-weight: 200;
-        font-size: 0.9vw;
+        font-size: 1rem;
       }
     }
   }

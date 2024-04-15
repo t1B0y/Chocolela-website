@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const QuantityButton = styled.div`
   display: flex;
+  margin-bottom: 1em;
   .quantity-side-button {
     width: 25px;
     height: 25px;

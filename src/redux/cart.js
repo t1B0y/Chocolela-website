@@ -45,6 +45,7 @@ export const getCart = () => async (dispatch, getState) => {
 
 export const addProduct = (productId, qty) => async (dispatch, getState) => {
   try {
+    console.log(productId, qty);
     const cartKey = cookie.load('chocolela_cart');
     const res = await Cart.post(
       cartKey ? `cart/add-item?cart_key=${cartKey}` : `cart/add-item`,

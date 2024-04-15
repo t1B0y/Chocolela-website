@@ -13,6 +13,7 @@
     "@cocart/cocart-rest-api": "^1.1.0",
     "@gsap/react": "^2.0.2",
     "@reduxjs/toolkit": "^1.9.7",
+    "@studio-freight/react-lenis": "^0.0.47",
     "@woocommerce/woocommerce-rest-api": "^1.0.1",
     "axios": "^1.6.7",
     "axios-oauth-1.0a": "^0.3.6",
